@@ -5,11 +5,11 @@ on:
     branches: [ "main" ]
 
 env:
-  PROJECT_ID: <your-project-id>
-  GAR_NAME: <your-google-artifact-registry-name>
-  GAR_LOCATION: <your-google-artifact-registry-location>
-  SERVICE: <name-of-your-service> # You can put any name you want here
-  REGION: <region-where-to-deploy-your-service>
+  PROJECT_ID: ${{ env.PROJECT_ID }}
+  GAR_NAME: ${{ env.GAR_NAME }}
+  GAR_LOCATION: ${{ env.GAR_LOCATION }}
+  SERVICE: ${{ env.SERVICE }}
+  REGION: ${{ env.REGION }}
 
 jobs:
   deploy:
