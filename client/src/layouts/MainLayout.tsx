@@ -77,9 +77,9 @@ const MainLayout = () => {
           }`}
         >
           <nav className="flex flex-col gap-3 text-sm font-medium">
-            <div className="flex justify-end items-center">
+            <div className="block md:hidden">
               <CircleArrowLeftIcon
-                className="cursor-pointer"
+                className="cursor-pointer flex justify-self-end"
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
               />
             </div>
