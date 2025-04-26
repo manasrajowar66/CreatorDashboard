@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+
+*{
+  box-sizing: border-box;
+  font-family: "Poppins", serif !important;
+}
+
+input, textarea, label{
+  font-family: "Poppins", serif !important;
+}
+
+#root{
+  width: 100%;
+  min-height: 100vh;
+}
+
+body {
+  background-color: whitesmoke !important;
+  min-height: 100vh;
+  /* overflow-x: hidden; */
+}
+
+
+:root{
+  --main-body: #212121;
+  --drawer: #171717;
+  --primary-text: #ececec;
+}
+
+button{
+  cursor: pointer;
+}
