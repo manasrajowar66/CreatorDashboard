@@ -5,11 +5,11 @@ on:
     branches: [ "main" ]
 
 env:
-  PROJECT_ID: ${{ env.PROJECT_ID }}
-  GAR_NAME: ${{ env.GAR_NAME }}
-  GAR_LOCATION: ${{ env.GAR_LOCATION }}
-  SERVICE: ${{ env.SERVICE }}
-  REGION: ${{ env.REGION }}
+  PROJECT_ID: creator-dashboard-458010
+  GAR_NAME: creatordashboard
+  GAR_LOCATION: asia-south1
+  SERVICE: creator-dashboard-service
+  REGION: asia-south1
 
 jobs:
   deploy:
