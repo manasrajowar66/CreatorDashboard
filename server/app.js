@@ -13,6 +13,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use("/api/health-check", (req, res) => {
+  res.status(200).json({
+    message: "App is running up!",
+  });
+});
 app.use("/api/auth", authRoutes);
 app.use("/api/feed", restrictToLoggedInUserOnly, feedRoutes);
 app.use("/api/post", restrictToLoggedInUserOnly, postRoutes);
