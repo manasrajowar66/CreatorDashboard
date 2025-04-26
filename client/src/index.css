@@ -12,12 +12,12 @@ input, textarea, label{
 
 #root{
   width: 100%;
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 body {
   background-color: whitesmoke !important;
-  min-height: 100vh;
+  min-height: 100dvh;
   /* overflow-x: hidden; */
 }
 

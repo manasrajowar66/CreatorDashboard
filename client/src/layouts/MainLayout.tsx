@@ -2,6 +2,8 @@ import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { AppDispatch, RootState } from "../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/reducers/user";
+import { useState } from "react";
+import { CircleArrowLeftIcon, MenuSquare } from "lucide-react";
 
 const sideMenuItems = [
   {
@@ -24,6 +26,7 @@ const sideMenuItems = [
 const MainLayout = () => {
   const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: RootState) => state.user.user);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const isAdmin = user?.role === "admin";
   const navigate = useNavigate();
   const location = useLocation();
@@ -38,9 +41,13 @@ const MainLayout = () => {
   if (!user) return null;
 
   return (
-    <div className="h-screen w-full flex flex-col bg-gradient-to-br from-blue-50 to-purple-50">
+    <div className="h-[100dvh] w-full flex flex-col bg-gradient-to-br from-blue-50 to-purple-50">
       {/* Top Navbar */}
-      <header className="bg-white/90 backdrop-blur-md shadow-md border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+      <header className="bg-white/90 backdrop-blur-md shadow-md border-b border-gray-200 px-6 py-4 flex md:justify-between items-center">
+        <MenuSquare
+          className="block mr-[1rem] md:hidden cursor-pointer"
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        />
         <h1
           className="text-2xl font-extrabold text-indigo-600 cursor-pointer tracking-tight"
           onClick={() => navigate("/")}
@@ -48,7 +55,7 @@ const MainLayout = () => {
           Creator Dashboard
         </h1>
         {user && (
-          <div className="flex gap-4 text-sm text-gray-800 items-center">
+          <div className="hidden md:flex gap-4 text-sm text-gray-800 items-center">
             <span className="font-semibold bg-gray-100 px-3 py-1 rounded-full">
               👤 {user.full_name}
             </span>
@@ -62,10 +69,20 @@ const MainLayout = () => {
       </header>
 
       {/* Sidebar + Main Content */}
-      <div className="flex flex-1 h-0 overflow-hidden">
+      <div className="flex flex-1 h-0 overflow-hidden relative">
         {/* Sidebar */}
-        <aside className="w-64 bg-white shadow-md border-r border-gray-200 p-6 hidden md:flex flex-col gap-6 rounded-tr-3xl">
+        <aside
+          className={`w-64 bg-white shadow-md border-r border-gray-200 p-6 md:flex flex-col gap-6 rounded-tr-3xl fixed left-0 top-0 z-20 h-full md:relative ${
+            isSidebarOpen ? "flex" : "hidden"
+          }`}
+        >
           <nav className="flex flex-col gap-3 text-sm font-medium">
+            <div className="flex justify-end items-center">
+              <CircleArrowLeftIcon
+                className="cursor-pointer"
+                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              />
+            </div>
             {sideMenuItems
               .filter(
                 (sideMenuItem) => !sideMenuItem.hide_roles.includes(user.role)

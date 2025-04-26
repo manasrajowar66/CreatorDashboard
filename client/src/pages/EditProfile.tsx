@@ -60,7 +60,7 @@ function EditProfile() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen p-4">
+    <div className="flex items-center justify-center min-h-[100dvh] p-4">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-lg space-y-6"
