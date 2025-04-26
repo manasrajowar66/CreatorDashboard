@@ -1,11 +1,11 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
 import { toast } from "react-toastify";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+const VITE_API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 
 // Create an Axios instance
 const axiosInstance = axios.create({
-  baseURL: BASE_URL,
+  baseURL: VITE_API_ENDPOINT,
   headers: {
     "Content-Type": "application/json",
   },
