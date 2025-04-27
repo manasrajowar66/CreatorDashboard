@@ -25,6 +25,7 @@ import {
 } from "./store/reducers/notification";
 import { useSocket } from "./hooks/useSocket";
 import { INotification } from "./types";
+import Posts from "./pages/Posts";
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
@@ -83,6 +84,7 @@ function App() {
           <Route element={<PrivateRoute allowedRoles={["user"]} />}>
             <Route element={<MainLayout />}>
               <Route path="/feed" element={<Feed />} />
+              <Route path="/posts/:type" element={<Posts />} />
             </Route>
           </Route>
           <Route path="/register" element={<Register />} />

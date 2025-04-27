@@ -18,7 +18,7 @@ const Notifications = () => {
   };
 
   return (
-    <div className="absolute right-[1rem] top-[0.5rem] w-80 max-h-[20rem] overflow-y-auto z-10 bg-white shadow-2xl drop-shadow-black rounded-lg p-4 border border-gray-200">
+    <div className="absolute right-[1rem] top-[0.5rem] w-80 max-h-[20rem] overflow-y-auto z-10 bg-white !shadow-2xl rounded-lg p-4 border border-gray-200">
       <h3 className="text-lg font-semibold mb-3 text-gray-800">Notifications</h3>
       {notifications.length === 0 ? (
         <p className="text-gray-500">No new notifications</p>
@@ -27,7 +27,7 @@ const Notifications = () => {
           {notifications.map((notification, index) => (
             <li
               key={index}
-              className="flex flex-col bg-blue-50 p-3 rounded-md shadow-sm transition-all hover:bg-blue-100 hover:shadow-md"
+              className="flex flex-col bg-blue-50 p-3 rounded-md !shadow-sm transition-all hover:bg-blue-100 hover:!shadow-md"
             >
               <div className="font-medium text-sm text-gray-700">
                 {notification.message}

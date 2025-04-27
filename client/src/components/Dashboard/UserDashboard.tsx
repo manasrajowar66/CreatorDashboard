@@ -7,24 +7,39 @@ import {
   hideGlobalLoader,
   showGlobalLoader,
 } from "../../store/reducers/globalLoader";
+import PostList from "./PostList";
 
 function UserDashboard() {
-  const [savedPosts, setSavedPosts] = useState<IPost[]>([]);
-  const [reportedPosts, setReportedPosts] = useState<IPost[]>([]);
-  const [recentActivities, setRecentActivities] = useState<IRecentActivity[]>(
-    []
-  );
+  const [postData, setPostData] = useState<{
+    savedPosts: IPost[];
+    reportedPosts: IPost[];
+    recentActivities: IRecentActivity[];
+    totalSavedPostCount: number;
+    totalReportedPostCount: number;
+  }>({
+    savedPosts: [],
+    reportedPosts: [],
+    recentActivities: [],
+    totalReportedPostCount: 0,
+    totalSavedPostCount: 0,
+  });
   const { user } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
+
+  const {
+    savedPosts,
+    reportedPosts,
+    recentActivities,
+    totalSavedPostCount,
+    totalReportedPostCount,
+  } = postData;
 
   useEffect(() => {
     (async () => {
       try {
         dispatch(showGlobalLoader());
         const response = await axiosInstance.get("dashboard");
-        setSavedPosts(response.data.saved);
-        setReportedPosts(response.data.reported);
-        setRecentActivities(response.data.recentActivities);
+        setPostData(response.data);
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
       } finally {
@@ -49,79 +64,31 @@ function UserDashboard() {
       <h2 className="text-3xl font-bold text-blue-700 mb-6">🎯 My Dashboard</h2>
 
       {/* Credits Card */}
-      <div className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-2xl shadow-lg p-6 mb-8 max-w-sm">
+      <div className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-2xl !shadow-lg p-6 mb-8 max-w-sm">
         <h4 className="text-sm opacity-90">Total Credits</h4>
         <p className="text-3xl font-bold mt-1">{user?.credits ?? 0}</p>
       </div>
 
       {/* Saved Posts */}
-      <div className="mb-10">
-        <h3 className="text-2xl font-semibold mb-4 text-gray-800">
-          🔖 Saved Posts
-        </h3>
-        <div className="grid gap-4">
-          {savedPosts.length === 0 ? (
-            <p className="text-sm text-gray-500">No saved posts found.</p>
-          ) : (
-            savedPosts.map((post, idx) => (
-              <div
-                key={idx}
-                className="bg-white rounded-xl shadow-md border hover:shadow-lg transition p-5"
-              >
-                <h4 className="text-lg font-medium text-gray-800">
-                  {post.title}
-                </h4>
-                <a
-                  href={post.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-500 text-sm hover:underline"
-                >
-                  View on {post.source}
-                </a>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
+      <PostList
+        posts={savedPosts}
+        totalCount={totalSavedPostCount}
+        type="saved"
+      />
 
       {/* Reported Posts */}
-      <div className="mb-10">
-        <h3 className="text-2xl font-semibold mb-4 text-gray-800">
-          🚨 Reported Posts
-        </h3>
-        <div className="grid gap-4">
-          {reportedPosts.length === 0 ? (
-            <p className="text-sm text-gray-500">No reported posts found.</p>
-          ) : (
-            reportedPosts.map((post, idx) => (
-              <div
-                key={idx}
-                className="bg-white rounded-xl shadow-md border hover:shadow-lg transition p-5"
-              >
-                <h4 className="text-lg font-medium text-gray-800">
-                  {post.title}
-                </h4>
-                <a
-                  href={post.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-red-500 text-sm hover:underline"
-                >
-                  View on {post.source}
-                </a>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
+      <PostList
+        posts={reportedPosts}
+        totalCount={totalReportedPostCount}
+        type="reported"
+      />
 
       {/* Recent Activities */}
       <div className="mb-10">
         <h3 className="text-2xl font-semibold mb-4 text-gray-800">
           🕒 Recent Activity
         </h3>
-        <div className="bg-white rounded-2xl shadow-md border p-6">
+        <div className="bg-white rounded-2xl !shadow-md border border-gray-300 p-6">
           {recentActivities.length === 0 ? (
             <p className="text-sm text-gray-500">No recent activity found.</p>
           ) : (
@@ -134,7 +101,7 @@ function UserDashboard() {
                   <div className="flex items-center">
                     {/* Activity Icon */}
                     <div
-                      className={`w-8 h-8 flex items-center justify-center rounded-full mr-4 ${
+                      className={`w-8 h-8 flex items-center justify-center shrink-0 rounded-full mr-2 ${
                         {
                           [NotificationType.POST_SAVE]: "bg-green-500",
                           [NotificationType.POST_REPORT]: "bg-red-500",

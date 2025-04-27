@@ -4,6 +4,21 @@ const Post = require("../models/Post");
 const { saveNotification } = require("../controllers/notification");
 const { NotificationType } = require("../utils/utils");
 
+router.get("/:type", async (req, res) => {
+  try {
+    const user = req.user;
+    const { type } = req.params;
+    const posts = await Post.find({ userId: user._id, action: type });
+
+    return res.status(200).json({
+      message: "Posts fetch successfully",
+      posts,
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch posts" });
+  }
+});
+
 router.post("/save", async (req, res) => {
   try {
     const { title, link, source } = req.body;

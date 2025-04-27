@@ -34,7 +34,7 @@ function UpdateCreditsDialog({
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
       onClick={handleOverlayClick}
     >
-      <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-md opacity-100">
+      <div className="bg-white rounded-xl !shadow-lg p-8 w-full max-w-md opacity-100">
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">
           Update Credits
         </h2>
@@ -46,7 +46,7 @@ function UpdateCreditsDialog({
           type="number"
           value={credits}
           onChange={(e) => setCredits(Number(e.target.value))}
-          className="w-full p-3 border rounded-lg mb-6 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full p-3 border border-gray-300 rounded-lg mb-6 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           placeholder="Enter credits"
         />
 

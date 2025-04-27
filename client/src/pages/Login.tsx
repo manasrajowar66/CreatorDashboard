@@ -53,7 +53,7 @@ function Login() {
 
   return (
     <div className="flex items-center justify-center min-h-[100dvh] bg-gradient-to-r from-blue-100 to-purple-200 px-4">
-      <div className="w-full max-w-md bg-white shadow-xl rounded-2xl p-8">
+      <div className="w-full max-w-md bg-white !shadow-xl rounded-2xl p-8">
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
           Welcome Back
         </h2>
@@ -67,7 +67,7 @@ function Login() {
               type="email"
               placeholder="Enter your email"
               {...register("email")}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
             {errors.email && (
               <p className="text-red-500 text-xs mt-1">
@@ -84,7 +84,7 @@ function Login() {
               type="password"
               placeholder="Enter your password"
               {...register("password")}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
             {errors.password && (
               <p className="text-red-500 text-xs mt-1">

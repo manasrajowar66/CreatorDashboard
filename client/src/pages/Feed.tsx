@@ -74,7 +74,7 @@ function Feed() {
           {feed.map((post, idx) => (
             <div
               key={idx}
-              className="bg-white rounded-2xl shadow-lg p-5 border hover:shadow-xl transition duration-300 ease-in-out transform hover:scale-[1.01]"
+              className="bg-white rounded-2xl !shadow-lg p-5 border border-gray-300 hover:!shadow-xl transition duration-300 ease-in-out transform hover:scale-[1.01]"
             >
               <h3 className="text-lg font-semibold text-gray-800 mb-1">
                 {post.title}

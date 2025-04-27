@@ -108,14 +108,14 @@ const MainLayout = () => {
       <div className="flex flex-1 h-0 overflow-hidden relative">
         {/* Sidebar */}
         <aside
-          className={`w-64 bg-white shadow-md border-r border-gray-200 p-6 md:flex flex-col gap-6 rounded-tr-3xl fixed left-0 top-0 z-20 h-full md:relative transition-transform ${
+          className={`w-64 bg-white !shadow-md border-r border-gray-200 p-6 md:flex flex-col gap-6 rounded-tr-3xl fixed left-0 top-0 z-20 h-full md:relative transition-transform ${
             isSidebarOpen ? "flex !translate-x-0" : "!-translate-x-64 md:!translate-x-0"
           }`}
         >
           <nav className="flex flex-col gap-3 text-sm font-medium">
-            <div className="block md:hidden">
+            <div className="flex justify-end md:!hidden">
               <CircleArrowLeftIcon
-                className="cursor-pointer flex justify-self-end"
+                className="cursor-pointer"
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
               />
             </div>
@@ -149,7 +149,7 @@ const MainLayout = () => {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-y-auto p-6 bg-white rounded-tl-3xl shadow-inner bg-gradient-to-br from-blue-50 to-blue-100">
+        <main className="flex-1 overflow-y-auto p-6 bg-white md:rounded-tl-3xl !shadow-inner bg-gradient-to-br from-blue-50 to-blue-100">
           {/* Notification Dropdown */}
           {isNotificationsOpen && (
             <div ref={notificationRef}>

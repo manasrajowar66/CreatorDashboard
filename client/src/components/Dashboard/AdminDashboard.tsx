@@ -90,35 +90,35 @@ function AdminDashboard() {
   };
 
   return (
-    <div className="p-6">
+    <div className="md:p-6">
       <h2 className="text-3xl font-bold mb-8 text-gray-800">Admin Dashboard</h2>
 
       {/* Stats Section */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
         {/* Stat Card */}
-        <div className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white p-6 rounded-2xl shadow-md hover:scale-105 transition-transform duration-300">
+        <div className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white p-6 rounded-2xl !shadow-md hover:!scale-105 transition-transform duration-300">
           <h4 className="text-sm uppercase opacity-80">Total Users</h4>
           <p className="text-3xl font-bold mt-2">{totalUsers}</p>
         </div>
 
-        <div className="bg-gradient-to-r from-green-400 to-green-600 text-white p-6 rounded-2xl shadow-md hover:scale-105 transition-transform duration-300">
+        <div className="bg-gradient-to-r from-green-400 to-green-600 text-white p-6 rounded-2xl !shadow-md hover:!scale-105 transition-transform duration-300">
           <h4 className="text-sm uppercase opacity-80">Total Saved</h4>
           <p className="text-3xl font-bold mt-2">{totalSaved}</p>
         </div>
 
-        <div className="bg-gradient-to-r from-rose-400 to-rose-600 text-white p-6 rounded-2xl shadow-md hover:scale-105 transition-transform duration-300">
+        <div className="bg-gradient-to-r from-rose-400 to-rose-600 text-white p-6 rounded-2xl !shadow-md hover:!scale-105 transition-transform duration-300">
           <h4 className="text-sm uppercase opacity-80">Total Reported</h4>
           <p className="text-3xl font-bold mt-2">{totalReported}</p>
         </div>
 
-        <div className="bg-gradient-to-r from-sky-400 to-blue-600 text-white p-6 rounded-2xl shadow-md hover:scale-105 transition-transform duration-300">
+        <div className="bg-gradient-to-r from-sky-400 to-blue-600 text-white p-6 rounded-2xl !shadow-md hover:!scale-105 transition-transform duration-300">
           <h4 className="text-sm uppercase opacity-80">Total Shared</h4>
           <p className="text-3xl font-bold mt-2">{totalShared}</p>
         </div>
       </div>
 
       {/* Users Table */}
-      <div className="bg-white p-6 rounded-2xl shadow-md overflow-x-auto border border-gray-200">
+      <div className="bg-white p-6 rounded-2xl !shadow-md overflow-x-auto border border-gray-200">
         <table className="min-w-full text-left">
           <thead>
             <tr className="bg-gray-100">
@@ -140,16 +140,16 @@ function AdminDashboard() {
           <tbody>
             {users.length > 0 ? (
               users.map((user, idx) => (
-                <tr key={idx} className="hover:bg-gray-50 transition">
-                  <td className="p-4 border-t text-gray-800">{user.email}</td>
-                  <td className="p-4 border-t text-gray-700">{user.saved}</td>
-                  <td className="p-4 border-t text-gray-700">
+                <tr key={idx} className="hover:bg-gray-50 transition border-t border-gray-300">
+                  <td className="p-4 text-gray-800">{user.email}</td>
+                  <td className="p-4 text-gray-700">{user.saved}</td>
+                  <td className="p-4 text-gray-700">
                     {user.reported}
                   </td>
-                  <td className="p-4 border-t text-gray-700">
+                  <td className="p-4 text-gray-700">
                     {user.credits ?? "-"}
                   </td>
-                  <td className="p-4 border-t">
+                  <td className="p-4">
                     <button
                       className="text-indigo-600 hover:underline text-sm"
                       onClick={() => handleOpenDialog(user)}

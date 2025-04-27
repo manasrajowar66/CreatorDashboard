@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { useNavigate } from "react-router-dom";
+import { Edit2 } from "lucide-react";
 
 function Profile() {
   const user = useSelector((state: RootState) => state.user.user);
@@ -18,8 +19,8 @@ function Profile() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-[80dvh] bg-gray-50 p-4 rounded-2xl">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-lg p-6 relative">
+    <div className="flex justify-center items-center min-h-[80dvh] md:bg-gray-50 p-4 rounded-2xl">
+      <div className="max-w-md w-full bg-white rounded-2xl !shadow-lg p-6 relative">
         <div className="flex flex-col items-center text-center">
           <div className="bg-blue-100 text-blue-600 w-24 h-24 rounded-full flex items-center justify-center text-4xl font-bold mb-4">
             {user.full_name.charAt(0)}
@@ -54,8 +55,8 @@ function Profile() {
           </p>
         </div>
 
-        <button className="absolute top-4 right-4 text-blue-500 hover:text-blue-700 text-sm underline" onClick={()=> navigate("edit")}>
-          Edit
+        <button className="absolute top-4 right-4 text-blue-500 hover:text-blue-700 text-sm underline flex items-center gap-2" onClick={()=> navigate("edit")}>
+          <Edit2 size={16} /> Edit
         </button>
       </div>
     </div>

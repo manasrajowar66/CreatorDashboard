@@ -63,7 +63,7 @@ function EditProfile() {
     <div className="flex items-center justify-center md:min-h-[100dvh] md:p-4">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-lg space-y-6"
+        className="bg-white !shadow-lg rounded-2xl p-8 w-full max-w-lg space-y-6"
       >
         <h2 className="text-3xl font-bold text-center text-blue-600 mb-6">
           Edit Profile

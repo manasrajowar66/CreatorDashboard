@@ -50,7 +50,7 @@ function Register() {
 
   return (
     <div className="flex items-center justify-center min-h-[100dvh] bg-gradient-to-r from-green-100 to-blue-100 px-4">
-      <div className="w-full max-w-md bg-white shadow-xl rounded-2xl p-8">
+      <div className="w-full max-w-md bg-white !shadow-xl rounded-2xl p-8">
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
           Create Account
         </h2>
@@ -62,7 +62,7 @@ function Register() {
               type="text"
               placeholder="John Doe"
               {...register("full_name")}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
             />
             {errors.full_name && (
               <p className="text-red-500 text-xs mt-1">{errors.full_name.message}</p>
@@ -75,7 +75,7 @@ function Register() {
               type="email"
               placeholder="Enter your email"
               {...register("email")}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
             />
             {errors.email && (
               <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
@@ -88,7 +88,7 @@ function Register() {
               type="password"
               placeholder="Enter your password"
               {...register("password")}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
             />
             {errors.password && (
               <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>
