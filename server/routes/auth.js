@@ -4,6 +4,9 @@ const { createHmac } = require("crypto");
 const lodash = require("lodash");
 const { generateToken } = require("../controllers/auth");
 const { restrictToLoggedInUserOnly } = require("../middlewares/auth");
+const { saveNotification } = require("../controllers/notification");
+const { NotificationType } = require("../utils/utils");
+const { getCreditsForActivity } = require("../controllers/user");
 
 const router = express.Router();
 
@@ -29,6 +32,11 @@ router.post("/register", async (req, res) => {
       full_name,
       email,
       password,
+    });
+
+    saveNotification({
+      userId: newUser._id,
+      type: NotificationType.REGISTER,
     });
 
     return res.status(201).json({
@@ -70,19 +78,30 @@ router.post("/login", async (req, res) => {
       });
     }
 
+    // add credits for daily login
     const today = new Date();
     const lastLogin = user.lastLogin || new Date(0);
     const isNewDay = today.toDateString() !== lastLogin.toDateString();
 
     if (isNewDay) {
-      user.credits += 5; // give 5 points for daily login
+      user.credits += getCreditsForActivity(NotificationType.LOGIN); // give 5 points for daily login
       user.lastLogin = today;
       await user.save();
+      saveNotification({
+        userId: user._id,
+        type: NotificationType.LOGIN,
+      });
+      saveNotification({
+        userId: user._id,
+        type: NotificationType.CREDITS_ADDED,
+        message: "You earned credits for logging in today! Keep it up!",
+      });
     }
 
     const result = lodash.omit(user.toObject(), ["password", "salt"]);
 
     const token = generateToken(result);
+
     return res.status(200).json({
       message: "Logged in successfully",
       user: result,
@@ -97,8 +116,13 @@ router.post("/login", async (req, res) => {
 });
 
 router.get("/auth-check", restrictToLoggedInUserOnly, async (req, res) => {
-  const user = req.user;
-  res.json({ message: "Authenticated", user });
+  let user = req.user;
+  user = await User.findOne({ _id: user._id });
+  const result = lodash.omit(user.toObject(), ["password", "salt"]);
+
+  const token = generateToken(result);
+
+  res.json({ message: "Authenticated", user: result, token });
 });
 
 router.put("/profile", restrictToLoggedInUserOnly, async (req, res) => {
@@ -124,9 +148,20 @@ router.put("/profile", restrictToLoggedInUserOnly, async (req, res) => {
     user.full_name = full_name;
     user.phone = phone;
     user.address = address || "";
-    if (user.full_name && user.phone && user.email && user.address && !user.profileCompleted) {
+
+    if (
+      user.full_name &&
+      user.phone &&
+      user.email &&
+      user.address &&
+      !user.profileCompleted
+    ) {
       user.profileCompleted = true;
-      user.credits += 10; // give 10 points for profile completed
+      user.credits += getCreditsForActivity(NotificationType.PROFILE_COMPLETE); // give 10 points for profile completed
+      saveNotification({
+        userId: user._id,
+        type: NotificationType.PROFILE_COMPLETE,
+      });
     }
 
     await user.save();
@@ -137,7 +172,7 @@ router.put("/profile", restrictToLoggedInUserOnly, async (req, res) => {
     return res.status(200).json({
       message: "Profile updated successfully",
       user: updatedUser,
-      token
+      token,
     });
   } catch (error) {
     console.error(error);

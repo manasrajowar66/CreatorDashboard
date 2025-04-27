@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Post = require("../models/Post");
 const User = require("../models/User");
-const FeedInteraction = require("../models/FeedInteraction");
+const UserActivity = require("../models/UserActivity");
 
 router.get("/", async (req, res) => {
   const userId = req.user._id;
@@ -12,7 +12,7 @@ router.get("/", async (req, res) => {
     if (role === "admin") {
       const users = await User.find();
       const posts = await Post.find();
-      const totalShared = await FeedInteraction.countDocuments({ action: 'shared' });
+      const totalShared = await UserActivity.countDocuments({ type: 'share' });
 
       const totalSaved = posts.filter((p) => p.action === "saved").length;
       const totalReported = posts.filter((p) => p.action === "reported").length;
@@ -44,7 +44,7 @@ router.get("/", async (req, res) => {
       const reported = posts.filter((p) => p.action === "reported");
 
       // Fetching Recent Activities
-      const recentActivities = await FeedInteraction.find({ userId })
+      const recentActivities = await UserActivity.find({ userId })
         .sort({ createdAt: -1 })
         .limit(10);
 

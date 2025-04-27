@@ -2,8 +2,9 @@ import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { AppDispatch, RootState } from "../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/reducers/user";
-import { useState } from "react";
-import { CircleArrowLeftIcon, MenuSquare } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { CircleArrowLeftIcon, MenuSquare, Bell } from "lucide-react";
+import Notifications from "../components/ui/Notifications";
 
 const sideMenuItems = [
   {
@@ -27,6 +28,8 @@ const MainLayout = () => {
   const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: RootState) => state.user.user);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const notificationRef = useRef<HTMLDivElement | null>(null);
   const isAdmin = user?.role === "admin";
   const navigate = useNavigate();
   const location = useLocation();
@@ -37,6 +40,25 @@ const MainLayout = () => {
     }
     return location.pathname.startsWith(path);
   };
+
+  // Close notifications dropdown if click is outside the dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        notificationRef.current &&
+        !notificationRef.current.contains(event.target as Node)
+      ) {
+        setIsNotificationsOpen(false); // Close the dropdown
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    // Clean up the event listener on component unmount
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   if (!user) return null;
 
@@ -64,6 +86,14 @@ const MainLayout = () => {
                 💰 Credits: {user.credits}
               </span>
             )}
+            {/* Notification Icon */}
+            <Bell
+              className="cursor-pointer text-gray-700"
+              onClick={(event) => {
+                event.stopPropagation();
+                setIsNotificationsOpen(!isNotificationsOpen);
+              }}
+            />
           </div>
         )}
       </header>
@@ -91,6 +121,7 @@ const MainLayout = () => {
                 return (
                   <Link
                     to={sideMenuItem.path}
+                    key={sideMenuItem.label}
                     className={`text-gray-700 ${
                       isActiveSideMenuItem(sideMenuItem.path)
                         ? "bg-indigo-100 text-indigo-600"
@@ -112,6 +143,13 @@ const MainLayout = () => {
 
         {/* Main Content */}
         <main className="flex-1 overflow-y-auto p-6 bg-white rounded-tl-3xl shadow-inner bg-gradient-to-br from-blue-50 to-blue-100">
+          {/* Notification Dropdown */}
+          {isNotificationsOpen && (
+            <div ref={notificationRef}>
+              <Notifications />
+            </div>
+          )}
+
           <Outlet />
         </main>
       </div>

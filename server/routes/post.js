@@ -1,17 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const Post = require("../models/Post");
-const FeedInteraction = require("../models/FeedInteraction");
-
-const logFeedInteraction = async ({ userId, title, link, action, source }) => {
-  return await FeedInteraction.create({
-    userId,
-    title,
-    link,
-    action,
-    source,
-  });
-};
+const { saveNotification } = require("../controllers/notification");
+const { NotificationType } = require("../utils/utils");
 
 router.post("/save", async (req, res) => {
   try {
@@ -24,13 +15,12 @@ router.post("/save", async (req, res) => {
       userId: user._id,
       action: "saved",
     });
-    await logFeedInteraction({
+
+    saveNotification({
       userId: user._id,
-      title,
-      link,
-      action: "saved",
-      source,
+      type: NotificationType.POST_SAVE,
     });
+
     res.status(201).json({ message: "Post saved successfully", post });
   } catch (err) {
     res.status(400).json({ error: "Failed to save post" });
@@ -48,12 +38,10 @@ router.post("/report", async (req, res) => {
       userId: user._id,
       action: "reported",
     });
-    await logFeedInteraction({
+
+    saveNotification({
       userId: user._id,
-      title,
-      link,
-      action: "reported",
-      source,
+      type: NotificationType.POST_REPORT,
     });
     res.status(201).json({ message: "Post reported successfully", post });
   } catch (err) {
@@ -63,15 +51,13 @@ router.post("/report", async (req, res) => {
 
 router.post("/share", async (req, res) => {
   try {
-    const { title, link, source } = req.body;
     const user = req.user;
-    await logFeedInteraction({
+
+    saveNotification({
       userId: user._id,
-      title,
-      link,
-      action: "shared",
-      source,
+      type: NotificationType.POST_SHARE,
     });
+
     res
       .status(201)
       .json({ message: "Post shared activity logged successfully" });

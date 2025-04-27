@@ -28,6 +28,11 @@ const userSlice = createSlice({
       }
       state.loading = false;
     },
+    updateCredits: (state, action) => {
+      if (state.user && action.payload) {
+        state.user.credits = action.payload;
+      }
+    },
     logout: (state) => {
       localStorage.removeItem("token");
       state.isAuthenticated = false;
@@ -35,16 +40,16 @@ const userSlice = createSlice({
       state.token = null;
       state.loading = false;
     },
-    authError: (state)=>{
+    authError: (state) => {
       localStorage.removeItem("token");
       state.isAuthenticated = false;
       state.user = null;
       state.token = null;
       state.loading = false;
-    }
+    },
   },
 });
 
 // Export actions and the reducer
-export const { setUser, logout, authError } = userSlice.actions;
+export const { setUser, logout, authError, updateCredits } = userSlice.actions;
 export default userSlice.reducer;

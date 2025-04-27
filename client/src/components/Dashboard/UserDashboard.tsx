@@ -1,21 +1,12 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "../../utils/axiosInstance";
-import { IPost } from "../../types";
+import { IPost, IRecentActivity, NotificationType } from "../../types";
 import { AppDispatch, RootState } from "../../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import {
   hideGlobalLoader,
   showGlobalLoader,
 } from "../../store/reducers/globalLoader";
-
-interface IRecentActivity {
-  _id: string;
-  title: string;
-  link: string;
-  action: "saved" | "reported" | "shared";
-  source: string;
-  createdAt: string;
-}
 
 function UserDashboard() {
   const [savedPosts, setSavedPosts] = useState<IPost[]>([]);
@@ -65,7 +56,9 @@ function UserDashboard() {
 
       {/* Saved Posts */}
       <div className="mb-10">
-        <h3 className="text-2xl font-semibold mb-4 text-gray-800">🔖 Saved Posts</h3>
+        <h3 className="text-2xl font-semibold mb-4 text-gray-800">
+          🔖 Saved Posts
+        </h3>
         <div className="grid gap-4">
           {savedPosts.length === 0 ? (
             <p className="text-sm text-gray-500">No saved posts found.</p>
@@ -75,7 +68,9 @@ function UserDashboard() {
                 key={idx}
                 className="bg-white rounded-xl shadow-md border hover:shadow-lg transition p-5"
               >
-                <h4 className="text-lg font-medium text-gray-800">{post.title}</h4>
+                <h4 className="text-lg font-medium text-gray-800">
+                  {post.title}
+                </h4>
                 <a
                   href={post.link}
                   target="_blank"
@@ -92,7 +87,9 @@ function UserDashboard() {
 
       {/* Reported Posts */}
       <div className="mb-10">
-        <h3 className="text-2xl font-semibold mb-4 text-gray-800">🚨 Reported Posts</h3>
+        <h3 className="text-2xl font-semibold mb-4 text-gray-800">
+          🚨 Reported Posts
+        </h3>
         <div className="grid gap-4">
           {reportedPosts.length === 0 ? (
             <p className="text-sm text-gray-500">No reported posts found.</p>
@@ -102,7 +99,9 @@ function UserDashboard() {
                 key={idx}
                 className="bg-white rounded-xl shadow-md border hover:shadow-lg transition p-5"
               >
-                <h4 className="text-lg font-medium text-gray-800">{post.title}</h4>
+                <h4 className="text-lg font-medium text-gray-800">
+                  {post.title}
+                </h4>
                 <a
                   href={post.link}
                   target="_blank"
@@ -119,36 +118,54 @@ function UserDashboard() {
 
       {/* Recent Activities */}
       <div className="mb-10">
-        <h3 className="text-2xl font-semibold mb-4 text-gray-800">🕒 Recent Activity</h3>
-        <div className="bg-white rounded-2xl border shadow-md p-6">
+        <h3 className="text-2xl font-semibold mb-4 text-gray-800">
+          🕒 Recent Activity
+        </h3>
+        <div className="bg-white rounded-2xl shadow-md border p-6">
           {recentActivities.length === 0 ? (
             <p className="text-sm text-gray-500">No recent activity found.</p>
           ) : (
-            <ul className="space-y-4">
+            <div className="space-y-4">
               {recentActivities.map((activity) => (
-                <li
+                <div
                   key={activity._id}
-                  className="flex justify-between items-start border-b pb-3 last:border-0 last:pb-0"
+                  className="flex items-center justify-between p-4 bg-gray-50 rounded-lg shadow-sm hover:shadow-md transition-all duration-300"
                 >
-                  <div>
-                    <p className="text-sm font-medium text-gray-800">
-                      {activity.action.toUpperCase()} - {activity.title}
-                    </p>
-                    <a
-                      href={activity.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-500 text-xs hover:underline"
+                  <div className="flex items-center">
+                    {/* Activity Icon */}
+                    <div
+                      className={`w-8 h-8 flex items-center justify-center rounded-full mr-4 ${
+                        {
+                          [NotificationType.POST_SAVE]: "bg-green-500",
+                          [NotificationType.POST_REPORT]: "bg-red-500",
+                          [NotificationType.POST_SHARE]: "bg-blue-500",
+                          [NotificationType.LOGIN]: "bg-gray-500",
+                          [NotificationType.PROFILE_UPDATED]: "bg-yellow-500",
+                          [NotificationType.CREDITS_REDEEMED]: "bg-purple-500", // Example color
+                          [NotificationType.CREDITS_ADDED]: "bg-teal-500", // Example color
+                          [NotificationType.FEED_INTERACTION]: "bg-indigo-500", // Example color
+                          [NotificationType.PASSWORD_CHANGED]: "bg-orange-500", // Example color
+                          [NotificationType.PROFILE_COMPLETE]: "bg-pink-500", // Example color
+                          [NotificationType.REGISTER]: "bg-amber-400",
+                        }[activity.type] || "bg-gray-400"
+                      }`}
                     >
-                      View on {activity.source}
-                    </a>
+                      <span className="text-white font-semibold">
+                        {activity.type[0].toUpperCase()}
+                      </span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-700">
+                        {activity.message}
+                      </p>
+                    </div>
                   </div>
-                  <span className="text-gray-400 text-xs whitespace-nowrap">
+                  <span className="text-xs text-gray-400">
                     {formatDate(activity.createdAt)}
                   </span>
-                </li>
+                </div>
               ))}
-            </ul>
+            </div>
           )}
         </div>
       </div>
