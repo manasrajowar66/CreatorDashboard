@@ -10,7 +10,7 @@ router.get("/", async (req, res) => {
 
   try {
     if (role === "admin") {
-      const users = await User.find();
+      const users = await User.find({ role: "user" });
       const posts = await Post.find();
       const totalShared = await UserActivity.countDocuments({ type: 'share' });
 

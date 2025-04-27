@@ -28,8 +28,10 @@ const MainLayout = () => {
   const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: RootState) => state.user.user);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const notificationRef = useRef<HTMLDivElement | null>(null);
+
   const isAdmin = user?.role === "admin";
   const navigate = useNavigate();
   const location = useLocation();
@@ -46,7 +48,8 @@ const MainLayout = () => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
         notificationRef.current &&
-        !notificationRef.current.contains(event.target as Node)
+        !notificationRef.current.contains(event.target as Node) &&
+        (event.target as HTMLElement).id !== "bell-icon"
       ) {
         setIsNotificationsOpen(false); // Close the dropdown
       }
@@ -65,29 +68,32 @@ const MainLayout = () => {
   return (
     <div className="h-[100dvh] w-full flex flex-col bg-gradient-to-br from-blue-50 to-purple-50">
       {/* Top Navbar */}
-      <header className="bg-white/90 backdrop-blur-md shadow-md border-b border-gray-200 px-6 py-4 flex md:justify-between items-center">
-        <MenuSquare
-          className="block mr-[1rem] md:hidden cursor-pointer"
-          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        />
-        <h1
-          className="text-2xl font-extrabold text-indigo-600 cursor-pointer tracking-tight"
-          onClick={() => navigate("/")}
-        >
-          Creator Dashboard
-        </h1>
+      <header className="bg-white/90 backdrop-blur-md shadow-md border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+        <div className="flex items-center">
+          <MenuSquare
+            className="block mr-[0.5rem] md:hidden cursor-pointer"
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          />
+          <h1
+            className="text-lg md:text-2xl font-extrabold text-indigo-600 cursor-pointer tracking-tight"
+            onClick={() => navigate("/")}
+          >
+            Creator Dashboard
+          </h1>
+        </div>
         {user && (
-          <div className="hidden md:flex gap-4 text-sm text-gray-800 items-center">
-            <span className="font-semibold bg-gray-100 px-3 py-1 rounded-full">
+          <div className="flex gap-4 text-sm text-gray-800 items-center">
+            <span className="hidden md:block font-semibold bg-gray-100 px-3 py-1 rounded-full">
               👤 {user.full_name}
             </span>
             {!isAdmin && (
-              <span className="text-green-600 bg-green-100 px-3 py-1 rounded-full">
+              <span className="hidden md:block text-green-600 bg-green-100 px-3 py-1 rounded-full">
                 💰 Credits: {user.credits}
               </span>
             )}
             {/* Notification Icon */}
             <Bell
+              id="bell-icon"
               className="cursor-pointer text-gray-700"
               onClick={(event) => {
                 event.stopPropagation();
@@ -102,8 +108,8 @@ const MainLayout = () => {
       <div className="flex flex-1 h-0 overflow-hidden relative">
         {/* Sidebar */}
         <aside
-          className={`w-64 bg-white shadow-md border-r border-gray-200 p-6 md:flex flex-col gap-6 rounded-tr-3xl fixed left-0 top-0 z-20 h-full md:relative ${
-            isSidebarOpen ? "flex" : "hidden"
+          className={`w-64 bg-white shadow-md border-r border-gray-200 p-6 md:flex flex-col gap-6 rounded-tr-3xl fixed left-0 top-0 z-20 h-full md:relative transition-transform ${
+            isSidebarOpen ? "flex !translate-x-0" : "!-translate-x-64 md:!translate-x-0"
           }`}
         >
           <nav className="flex flex-col gap-3 text-sm font-medium">
@@ -127,6 +133,7 @@ const MainLayout = () => {
                         ? "bg-indigo-100 text-indigo-600"
                         : "hover:bg-indigo-100 hover:text-indigo-600"
                     } rounded-lg px-4 py-2 transition`}
+                    onClick={() => setIsSidebarOpen(false)}
                   >
                     {sideMenuItem.label}
                   </Link>

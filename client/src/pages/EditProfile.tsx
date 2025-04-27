@@ -49,7 +49,7 @@ function EditProfile() {
   const onSubmit = async (data: EditProfileForm) => {
     try {
       dispatch(showGlobalLoader());
-      const response = await axiosInstance.put("auth/profile", data);
+      const response = await axiosInstance.put("user/profile", data);
       dispatch(setUser(response.data));
       navigate("/profile");
     } catch (err) {
@@ -60,7 +60,7 @@ function EditProfile() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[100dvh] p-4">
+    <div className="flex items-center justify-center md:min-h-[100dvh] md:p-4">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-lg space-y-6"

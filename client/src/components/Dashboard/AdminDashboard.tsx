@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "../../utils/axiosInstance";
 import { useDispatch } from "react-redux";
-import { hideGlobalLoader, showGlobalLoader } from "../../store/reducers/globalLoader";
+import {
+  hideGlobalLoader,
+  showGlobalLoader,
+} from "../../store/reducers/globalLoader";
+import UpdateCreditsDialog from "./UpdateCreditsDialog";
 
 interface DashboardUser {
   userId: string;
@@ -19,6 +23,9 @@ function AdminDashboard() {
   const [totalSaved, setTotalSaved] = useState(0);
   const [totalReported, setTotalReported] = useState(0);
   const [totalShared, setTotalShared] = useState(0);
+
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<DashboardUser | null>(null);
 
   const dispatch = useDispatch();
 
@@ -47,6 +54,40 @@ function AdminDashboard() {
       }
     })();
   }, [dispatch]);
+
+  const handleOpenDialog = (user: DashboardUser) => {
+    setSelectedUser(user);
+    setDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+    setSelectedUser(null);
+  };
+
+  const handleSaveCredits = async (newCredits: number) => {
+    if (!selectedUser) return;
+
+    try {
+      dispatch(showGlobalLoader());
+      await axiosInstance.patch(`user/update-credits/${selectedUser.userId}`, {
+        updatedCredits: newCredits,
+      });
+
+      // Update local state
+      setUsers((prevUsers) =>
+        prevUsers.map((u) =>
+          u.userId === selectedUser.userId ? { ...u, credits: newCredits } : u
+        )
+      );
+
+      handleCloseDialog();
+    } catch (error) {
+      console.error("Error updating credits:", error);
+    } finally {
+      dispatch(hideGlobalLoader());
+    }
+  };
 
   return (
     <div className="p-6">
@@ -82,9 +123,18 @@ function AdminDashboard() {
           <thead>
             <tr className="bg-gray-100">
               <th className="p-4 text-sm font-semibold text-gray-600">Email</th>
-              <th className="p-4 text-sm font-semibold text-green-600">Saved</th>
-              <th className="p-4 text-sm font-semibold text-rose-500">Reported</th>
-              <th className="p-4 text-sm font-semibold text-blue-600">Credits</th>
+              <th className="p-4 text-sm font-semibold text-green-600">
+                Saved
+              </th>
+              <th className="p-4 text-sm font-semibold text-rose-500">
+                Reported
+              </th>
+              <th className="p-4 text-sm font-semibold text-blue-600">
+                Credits
+              </th>
+              <th className="p-4 text-sm font-semibold text-gray-600">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -93,8 +143,20 @@ function AdminDashboard() {
                 <tr key={idx} className="hover:bg-gray-50 transition">
                   <td className="p-4 border-t text-gray-800">{user.email}</td>
                   <td className="p-4 border-t text-gray-700">{user.saved}</td>
-                  <td className="p-4 border-t text-gray-700">{user.reported}</td>
-                  <td className="p-4 border-t text-gray-700">{user.credits ?? "-"}</td>
+                  <td className="p-4 border-t text-gray-700">
+                    {user.reported}
+                  </td>
+                  <td className="p-4 border-t text-gray-700">
+                    {user.credits ?? "-"}
+                  </td>
+                  <td className="p-4 border-t">
+                    <button
+                      className="text-indigo-600 hover:underline text-sm"
+                      onClick={() => handleOpenDialog(user)}
+                    >
+                      Update Credits
+                    </button>
+                  </td>
                 </tr>
               ))
             ) : (
@@ -107,6 +169,16 @@ function AdminDashboard() {
           </tbody>
         </table>
       </div>
+      {/* Update Credits Dialog */}
+      {selectedUser && (
+        <UpdateCreditsDialog
+          open={dialogOpen}
+          onClose={handleCloseDialog}
+          onSave={handleSaveCredits}
+          userEmail={selectedUser.email}
+          currentCredits={selectedUser.credits}
+        />
+      )}
     </div>
   );
 }

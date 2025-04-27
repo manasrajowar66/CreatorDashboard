@@ -18,7 +18,7 @@ function Profile() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-[80vh] bg-gray-50 p-4 rounded-2xl">
+    <div className="flex justify-center items-center min-h-[80dvh] bg-gray-50 p-4 rounded-2xl">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-lg p-6 relative">
         <div className="flex flex-col items-center text-center">
           <div className="bg-blue-100 text-blue-600 w-24 h-24 rounded-full flex items-center justify-center text-4xl font-bold mb-4">

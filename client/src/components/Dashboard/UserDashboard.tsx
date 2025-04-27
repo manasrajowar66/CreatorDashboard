@@ -45,7 +45,7 @@ function UserDashboard() {
   };
 
   return (
-    <div className="p-6">
+    <div className="md:p-6">
       <h2 className="text-3xl font-bold text-blue-700 mb-6">🎯 My Dashboard</h2>
 
       {/* Credits Card */}
@@ -129,7 +129,7 @@ function UserDashboard() {
               {recentActivities.map((activity) => (
                 <div
                   key={activity._id}
-                  className="flex items-center justify-between p-4 bg-gray-50 rounded-lg shadow-sm hover:shadow-md transition-all duration-300"
+                  className="flex items-center justify-between p-4 bg-gray-50 rounded-lg !shadow-sm hover:!shadow-md transition-all duration-300"
                 >
                   <div className="flex items-center">
                     {/* Activity Icon */}
