@@ -91,6 +91,10 @@ router.patch(
         userId,
         type: NotificationType.PROFILE_UPDATED,
         message: "Your credits have been updated by admin!",
+        updateUserCreditsFlag: false,
+        extraInfo:{
+          credits: updatedCredits
+        }
       });
 
       return res.status(200).json({

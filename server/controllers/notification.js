@@ -30,6 +30,7 @@ const notificationMessages = {
  * @param {string} params.message
  * @param {string} [params.postId] - post ID (for post-related actions)
  * @param {Object} [params.extraInfo] - additional data
+ * @param {number} params.updateUserCreditsFlag
  */
 const saveNotification = async ({
   userId,
@@ -37,6 +38,7 @@ const saveNotification = async ({
   message = "",
   postId = null,
   extraInfo = null,
+  updateUserCreditsFlag = true,
 }) => {
   try {
     if (!userId || !type) {
@@ -71,13 +73,21 @@ const saveNotification = async ({
 
     await activity.save();
 
-    const updatedCredit = await updateUserCredits(activity);
+    let updatedCredit;
+
+    if (updateUserCreditsFlag) {
+      updatedCredit = await updateUserCredits(activity);
+    }
 
     const io = getIo();
     if (io) {
       const socketId = await redisClient.get(`user:${userId}`);
       io.to(socketId).emit("newNotification", notification);
-      io.to(socketId).emit("updateCredit", updatedCredit);
+      if (updateUserCreditsFlag) {
+        io.to(socketId).emit("updateCredit", updatedCredit);
+      }else if(extraInfo && extraInfo.credits){
+        io.to(socketId).emit("updateCredit", extraInfo.credits);
+      }
     }
 
     return { success: true, message: "Notification saved successfully" };

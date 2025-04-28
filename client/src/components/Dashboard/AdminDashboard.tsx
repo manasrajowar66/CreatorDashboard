@@ -18,11 +18,22 @@ interface DashboardUser {
 }
 
 function AdminDashboard() {
-  const [users, setUsers] = useState<DashboardUser[]>([]);
-  const [totalUsers, setTotalUsers] = useState(0);
-  const [totalSaved, setTotalSaved] = useState(0);
-  const [totalReported, setTotalReported] = useState(0);
-  const [totalShared, setTotalShared] = useState(0);
+  const [usersData, setUserData] = useState<{
+    users: DashboardUser[];
+    totalUsers: number;
+    totalSaved: number;
+    totalReported: number;
+    totalShared: number;
+  }>({
+    users: [],
+    totalReported: 0,
+    totalSaved: 0,
+    totalShared: 0,
+    totalUsers: 0,
+  });
+
+  const { users, totalReported, totalSaved, totalShared, totalUsers } =
+    usersData;
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<DashboardUser | null>(null);
@@ -42,11 +53,13 @@ function AdminDashboard() {
           totalShared,
         } = response.data;
 
-        setUsers(userStats);
-        setTotalUsers(totalUsers);
-        setTotalSaved(totalSaved);
-        setTotalReported(totalReported);
-        setTotalShared(totalShared);
+        setUserData({
+          users: userStats,
+          totalReported,
+          totalSaved,
+          totalShared,
+          totalUsers,
+        });
       } catch (error) {
         console.error("Error fetching admin dashboard data:", error);
       } finally {
@@ -75,11 +88,14 @@ function AdminDashboard() {
       });
 
       // Update local state
-      setUsers((prevUsers) =>
-        prevUsers.map((u) =>
-          u.userId === selectedUser.userId ? { ...u, credits: newCredits } : u
-        )
-      );
+      setUserData((prevState) => {
+        return {
+          ...prevState,
+          users: prevState.users.map((u) =>
+            u.userId === selectedUser.userId ? { ...u, credits: newCredits } : u
+          ),
+        };
+      });
 
       handleCloseDialog();
     } catch (error) {
@@ -140,15 +156,14 @@ function AdminDashboard() {
           <tbody>
             {users.length > 0 ? (
               users.map((user, idx) => (
-                <tr key={idx} className="hover:bg-gray-50 transition border-t border-gray-300">
+                <tr
+                  key={idx}
+                  className="hover:bg-gray-50 transition border-t border-gray-300"
+                >
                   <td className="p-4 text-gray-800">{user.email}</td>
                   <td className="p-4 text-gray-700">{user.saved}</td>
-                  <td className="p-4 text-gray-700">
-                    {user.reported}
-                  </td>
-                  <td className="p-4 text-gray-700">
-                    {user.credits ?? "-"}
-                  </td>
+                  <td className="p-4 text-gray-700">{user.reported}</td>
+                  <td className="p-4 text-gray-700">{user.credits ?? "-"}</td>
                   <td className="p-4">
                     <button
                       className="text-indigo-600 hover:underline text-sm"
