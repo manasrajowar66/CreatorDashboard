@@ -84,7 +84,7 @@ const MainLayout = () => {
         {user && (
           <div className="flex gap-4 text-sm text-gray-800 items-center">
             <span className="hidden md:block font-semibold bg-gray-100 px-3 py-1 rounded-full">
-              👤 {user.full_name}
+              👤 {user.full_name} {isAdmin ? "(Admin)" : ""}
             </span>
             {!isAdmin && (
               <span className="hidden md:block text-green-600 bg-green-100 px-3 py-1 rounded-full">
@@ -92,14 +92,16 @@ const MainLayout = () => {
               </span>
             )}
             {/* Notification Icon */}
-            <Bell
-              id="bell-icon"
-              className="cursor-pointer text-gray-700"
-              onClick={(event) => {
-                event.stopPropagation();
-                setIsNotificationsOpen(!isNotificationsOpen);
-              }}
-            />
+            {!isAdmin && (
+              <Bell
+                id="bell-icon"
+                className="cursor-pointer text-gray-700"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setIsNotificationsOpen(!isNotificationsOpen);
+                }}
+              />
+            )}
           </div>
         )}
       </header>
@@ -109,7 +111,9 @@ const MainLayout = () => {
         {/* Sidebar */}
         <aside
           className={`w-64 bg-white !shadow-md border-r border-gray-200 p-6 md:flex flex-col gap-6 rounded-tr-3xl fixed left-0 top-0 z-20 h-full md:relative transition-transform ${
-            isSidebarOpen ? "flex !translate-x-0" : "!-translate-x-64 md:!translate-x-0"
+            isSidebarOpen
+              ? "flex !translate-x-0"
+              : "!-translate-x-64 md:!translate-x-0"
           }`}
         >
           <nav className="flex flex-col gap-3 text-sm font-medium">

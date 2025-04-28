@@ -74,6 +74,7 @@ function UserDashboard() {
         posts={savedPosts}
         totalCount={totalSavedPostCount}
         type="saved"
+        showViewMoreButton={totalSavedPostCount > 0}
       />
 
       {/* Reported Posts */}
@@ -81,6 +82,7 @@ function UserDashboard() {
         posts={reportedPosts}
         totalCount={totalReportedPostCount}
         type="reported"
+        showViewMoreButton={totalReportedPostCount > 0}
       />
 
       {/* Recent Activities */}
