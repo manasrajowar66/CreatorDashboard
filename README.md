@@ -163,7 +163,6 @@ Admins can:
 ## 📄 Author
 
 - **Name:** Manas Rajowar
-- **Role:** MERN Stack Developer
 - **GitHub:** [@manasrajowar66](https://github.com/manasrajowar66)
 - **LinkedIn:** [Manas Rajowar](https://www.linkedin.com/in/manas-rajowar-3b0b981a3/)
 
