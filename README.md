@@ -1,4 +1,4 @@
-# Creator Dashboard — MERN Stack Assignment
+# Creator Dashboard — MERN Stack
 
 ---
 
