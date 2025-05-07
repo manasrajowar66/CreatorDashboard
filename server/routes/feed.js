@@ -20,7 +20,13 @@ router.get("/", async (req, res) => {
     const allPosts = [];
 
     for (const sub of subreddits) {
-      const response = await axios.get(`https://www.reddit.com/r/${sub}.json`);
+      const response = await axios.get(`https://www.reddit.com/r/${sub}.json`, {
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (compatible; MyRedditApp/1.0; +https://creatordashboard-m3jk.onrender.com)",
+          Accept: "application/json",
+        },
+      });
       const posts = response.data.data.children.map((item) => ({
         title: item.data.title,
         link: "https://reddit.com" + item.data.permalink,
