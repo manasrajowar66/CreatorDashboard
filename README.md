@@ -33,7 +33,7 @@ This project is a **Creator Dashboard** web application that allows users (creat
 
 | Environment                                     | URL                                                                                                                                        |
 | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| Full Application (Deployed on Google Cloud Run) | [https://creator-dashboard-service-431475800579.asia-south1.run.app/](https://creator-dashboard-service-431475800579.asia-south1.run.app/) |
+| Full Application (Deployed on Google Cloud Run) | [https://creator-dashboard-service-431475800579.asia-south1.run.app/](https://creatordashboard-m3jk.onrender.com) |
 
 | Repository  | URL                                                                                                      |
 | ----------- | -------------------------------------------------------------------------------------------------------- |
